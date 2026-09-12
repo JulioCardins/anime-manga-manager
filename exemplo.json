@@ -1,0 +1,82 @@
+[
+    {
+        "nome": "Attack on Titan",
+        "nota": 10,
+        "status": true,
+        "categoria": "Anime",
+        "interesse": false,
+        "analise": "História intensa com muitos mistérios e reviravoltas."
+    },
+    {
+        "nome": "Chainsaw Man",
+        "nota": 8,
+        "status": false,
+        "categoria": "Manga",
+        "interesse": false,
+        "analise": "Caótico, imprevisível e muito divertido."
+    },
+    {
+        "nome": "Hunter x Hunter",
+        "nota": 9,
+        "status": false,
+        "categoria": "Anime",
+        "interesse": false,
+        "analise": "Sistema de poderes e desenvolvimento dos arcos muito interessantes."
+    },
+    {
+        "nome": "Dandadan",
+        "nota": 0,
+        "status": false,
+        "categoria": "Manga",
+        "interesse": true,
+        "analise": "<SEM ANALISE>"
+    },
+    {
+        "nome": "Cowboy Bebop",
+        "nota": 8,
+        "status": true,
+        "categoria": "Anime",
+        "interesse": false,
+        "analise": "Gostei bastante da ambientação e dos personagens."
+    },
+    {
+        "nome": "Kingdom",
+        "nota": 0,
+        "status": false,
+        "categoria": "Manga",
+        "interesse": true,
+        "analise": "<SEM ANALISE>"
+    },
+    {
+        "nome": "Cyberpunk: Edgerunners",
+        "nota": 9,
+        "status": true,
+        "categoria": "Anime",
+        "interesse": false,
+        "analise": "Curto, intenso e com um final marcante."
+    },
+    {
+        "nome": "Blue Lock",
+        "nota": 7,
+        "status": false,
+        "categoria": "Manga",
+        "interesse": false,
+        "analise": "<SEM ANALISE>"
+    },
+    {
+        "nome": "Neon Genesis Evangelion",
+        "nota": 0,
+        "status": false,
+        "categoria": "Anime",
+        "interesse": true,
+        "analise": "<SEM ANALISE>"
+    },
+    {
+        "nome": "Slam Dunk",
+        "nota": 9,
+        "status": true,
+        "categoria": "Manga",
+        "interesse": false,
+        "analise": "Excelente evolução dos personagens e partidas muito empolgantes."
+    }
+]
