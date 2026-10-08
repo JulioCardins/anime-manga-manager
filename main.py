@@ -1,7 +1,9 @@
 from cores import *
 from funcoes import *
 from time import sleep
+from banco import criarBanco
 
+criarBanco()
 if arquivoExiste("animes.txt"):
     while True:
         escolha = menu(["Adicionar Obra", "Mostrar Obras Cadastradas", "Editar Obras Cadastradas", "Excluir Obras Cadastradas", "Importar Obras", "Exportar Obras" ,"Sair do Sistema"])

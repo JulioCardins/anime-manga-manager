@@ -2,7 +2,7 @@ import math
 from time import sleep
 from cores import *
 import json
-
+from banco import *
 def linha(tamanho=50):
     """
     :param tamanho: Tamanho da linha pré definida
@@ -193,6 +193,7 @@ def cadastrar():
             'interesse': interesse,
             'analise': analise,
         }
+        adicionarObra(apresentacao)
         obras.append(apresentacao)
         if salvarObras(obras):
             print("UM MOMENTO...")
@@ -217,7 +218,7 @@ def listar():
     fim = itens_por_pagina
     pagina = 1
     cabecalho("OBRAS CADASTRADAS")
-    obras = carregarObras()
+    obras = buscarObras()
     if obras is None:
         return
     if len(obras) == 0:
@@ -312,112 +313,264 @@ def listar():
                 return
 
 
+
 def editar():
-    msg = vermelho("PARA ALTERNAR VALORES DE OBRAS NA LISTA DE INTERESSE, POR FAVOR, SELECIONE A OPÇÃO --- INTERESSE --- EM EDITAR OBRAS")
-    obras = carregarObras()
+    msg = vermelho(
+        "PARA ALTERNAR VALORES DE OBRAS NA LISTA DE INTERESSE, "
+        "POR FAVOR, SELECIONE A OPÇÃO --- INTERESSE --- EM EDITAR OBRAS"
+    )
+    obras = buscarObras()
     if obras is None:
         return
     if len(obras) == 0:
         print(vermelho("NENHUMA OBRA CADASTRADA!"))
         return
     mostrarObrasSelecao(obras)
-    escolha = validarEscolha(input("Sua escolha: "), len(obras)) - 1
+    escolha = validarEscolha(
+        input("Sua escolha: "),
+        len(obras)
+    ) - 1
     obra_escolhida = obras[escolha]
-    print(f"{branco("Você escolheu editar a obra: ")} {azul(obra_escolhida["nome"])}")
+    id_obra = obra_escolhida["id"]
+    print(
+        f"{branco('Você escolheu editar a obra: ')}"
+        f"{azul(obra_escolhida['nome'])}"
+    )
+
     print(branco("O que vamos editar? "))
-    print(f"{amarelo("[1]")} {azul("Nome: ")}")
-    print(f"{amarelo("[2]")} {azul("Nota: ")}")
-    print(f"{amarelo("[3]")} {azul("Status de conclusão:")}")
-    print(f"{amarelo("[4]")} {azul("Categoria: ")}")
-    print(f"{amarelo("[5]")} {azul("Interesse: ")}")
-    print(f"{amarelo("[6]")} {azul("Analise: ")}")
-    print(f"{amarelo("[7]")} {azul("Voltar")}")
-    escolha_editar = validarEscolha(input("Sua escolha: "), 7)
+    print(f"{amarelo('[1]')} {azul('Nome: ')}")
+    print(f"{amarelo('[2]')} {azul('Nota: ')}")
+    print(f"{amarelo('[3]')} {azul('Status de conclusão:')}")
+    print(f"{amarelo('[4]')} {azul('Categoria: ')}")
+    print(f"{amarelo('[5]')} {azul('Interesse: ')}")
+    print(f"{amarelo('[6]')} {azul('Analise: ')}")
+    print(f"{amarelo('[7]')} {azul('Voltar')}")
+
+    escolha_editar = validarEscolha(
+        input("Sua escolha: "),
+        7
+    )
+
     match escolha_editar:
+
         case 1:
-            novo_nome = validarNome(input("Digite o nome atualizado: "))
-            obra_escolhida["nome"] = novo_nome
+            novo_nome = validarNome(
+                input("Digite o nome atualizado: ")
+            )
+
+            if atualizarObras(id_obra, "nome", novo_nome):
+                print(verde("OBRA ATUALIZADA COM SUCESSO!"))
+            else:
+                print(vermelho("NÃO FOI POSSÍVEL EDITAR A OBRA"))
+
         case 2:
-            if obra_escolhida['interesse']:
+            if obra_escolhida["interesse"]:
                 print(msg)
                 return
-            nova_nota = validarNota(input("Digite a nota atualizada: "))
-            obra_escolhida["nota"] = nova_nota
+
+            nova_nota = validarNota(
+                input("Digite a nota atualizada: ")
+            )
+
+            if atualizarObras(id_obra, "nota", nova_nota):
+                print(verde("OBRA ATUALIZADA COM SUCESSO!"))
+            else:
+                print(vermelho("NÃO FOI POSSÍVEL EDITAR A OBRA"))
+
         case 3:
-            if obra_escolhida['interesse']:
+            if obra_escolhida["interesse"]:
                 print(msg)
                 return
+
             concluidoOpcao()
-            novo_status = validarEscolha(input("Sua opção: "))
+
+            novo_status = validarEscolha(
+                input("Sua opção: ")
+            )
+
             match novo_status:
                 case 1:
                     novo_status = True
                 case 2:
                     novo_status = False
-            obra_escolhida["status"] = novo_status
+
+            if atualizarObras(id_obra, "status", novo_status):
+                print(verde("OBRA ATUALIZADA COM SUCESSO!"))
+            else:
+                print(vermelho("NÃO FOI POSSÍVEL EDITAR A OBRA"))
+
         case 4:
             print(branco("Qual a categoria da obra? "))
             print(branco("[1] - Anime [2] - Mangá"))
-            categoria = validarEscolha(input("Sua opção: "))
+
+            categoria = validarEscolha(
+                input("Sua opção: ")
+            )
+
             match categoria:
                 case 1:
                     nova_categoria = "Anime"
                 case 2:
                     nova_categoria = "Manga"
-            obra_escolhida["categoria"] = nova_categoria
+
+            if atualizarObras(
+                id_obra,
+                "categoria",
+                nova_categoria
+            ):
+                print(verde("OBRA ATUALIZADA COM SUCESSO!"))
+            else:
+                print(vermelho("NÃO FOI POSSÍVEL EDITAR A OBRA"))
+
         case 5:
             if not obra_escolhida["interesse"]:
-                print(f"{branco("Deseja colocar a obra"), azul(obra_escolhida['nome']), branco('na lista de interesses:')} ")
-                print(vermelho("A AÇÃO IRÁ COLOCAR ALGUMAS INFOMAÇÕES COMO DEFAULT, DESEJA CONTINUAR?"))
-                print(f'{amarelo('[1]')} {vermelho('SIM')} {amarelo('[2]')} {verde('NÃO')}')
-                opc = validarEscolha(input("Sua opção: "))
+
+                print(
+                    f"{branco('Deseja colocar a obra')} "
+                    f"{azul(obra_escolhida['nome'])} "
+                    f"{branco('na lista de interesses:')}"
+                )
+
+                print(
+                    vermelho(
+                        "A AÇÃO IRÁ COLOCAR ALGUMAS "
+                        "INFORMAÇÕES COMO DEFAULT, DESEJA CONTINUAR?"
+                    )
+                )
+
+                print(
+                    f"{amarelo('[1]')} {vermelho('SIM')} "
+                    f"{amarelo('[2]')} {verde('NÃO')}"
+                )
+
+                opc = validarEscolha(
+                    input("Sua opção: ")
+                )
+
                 if opc == 1:
-                    obra_escolhida["interesse"] = True
-                    obra_escolhida["status"] = False
-                    obra_escolhida['nota'] = 0
-                    obra_escolhida['analise'] = "<SEM ANALISE>"
+                    atualizarObras(
+                        id_obra,
+                        "interesse",
+                        True
+                    )
+
+                    atualizarObras(
+                        id_obra,
+                        "status",
+                        False
+                    )
+
+                    atualizarObras(
+                        id_obra,
+                        "nota",
+                        0
+                    )
+
+                    atualizarObras(
+                        id_obra,
+                        "analise",
+                        "<SEM ANALISE>"
+                    )
+
+                    print(verde("OBRA ADICIONADA À LISTA DE INTERESSE!"))
+
                 else:
                     return
+
             else:
-                obra_escolhida["interesse"] = False
+                atualizarObras(
+                    id_obra,
+                    "interesse",
+                    False
+                )
+
                 print(branco("O que achou da obra? "))
                 notas()
-                obra_escolhida['nota'] = validarNota(input("Sua opção: "))
+
+                nova_nota = validarNota(
+                    input("Sua opção: ")
+                )
+
+                atualizarObras(
+                    id_obra,
+                    "nota",
+                    nova_nota
+                )
+
                 concluidoOpcao()
-                novo_status = validarEscolha(input("Sua opção: "))
+
+                novo_status = validarEscolha(
+                    input("Sua opção: ")
+                )
+
                 match novo_status:
                     case 1:
                         novo_status = True
                     case 2:
                         novo_status = False
-                obra_escolhida["status"] = novo_status
-                print(branco("Deseja adicionar uma breve analise da obra? "))
+
+                atualizarObras(
+                    id_obra,
+                    "status",
+                    novo_status
+                )
+
+                print(
+                    branco(
+                        "Deseja adicionar uma breve analise da obra?"
+                    )
+                )
+
                 print(branco("[1] - SIM [2] - Não"))
-                opc = validarEscolha(input("Sua Opção: "))
+
+                opc = validarEscolha(
+                    input("Sua Opção: ")
+                )
 
                 if opc == 1:
-                    obra_escolhida['analise'] = input("Digite sua analise da obra: ")
-                    if obra_escolhida['analise'].strip() == "":
-                        obra_escolhida['analise'] = "<SEM ANALISE>"
+                    nova_analise = input(
+                        "Digite sua analise da obra: "
+                    )
+
+                    if nova_analise.strip() == "":
+                        nova_analise = "<SEM ANALISE>"
+
                 else:
-                    obra_escolhida['analise'] = "<SEM ANALISE>"
+                    nova_analise = "<SEM ANALISE>"
+
+                atualizarObras(
+                    id_obra,
+                    "analise",
+                    nova_analise
+                )
+
+                print(verde("OBRA RETIRADA DA LISTA DE INTERESSE!"))
+
         case 6:
             if obra_escolhida["interesse"]:
                 print(msg)
                 return
-            nova_analise = (input("Digite a nova analise da obra: "))
+
+            nova_analise = input(
+                "Digite a nova analise da obra: "
+            )
+
             if nova_analise.strip() == "":
-                obra_escolhida["analise"] = "<SEM ANALISE>"
+                nova_analise = "<SEM ANALISE>"
+
+            if atualizarObras(
+                id_obra,
+                "analise",
+                nova_analise
+            ):
+                print(verde("OBRA ATUALIZADA COM SUCESSO!"))
             else:
-                obra_escolhida["analise"] = nova_analise
+                print(vermelho("NÃO FOI POSSÍVEL EDITAR A OBRA"))
+
         case 7:
             print(verde("Retornando ao Menu..."))
             sleep(1)
             return
-    if salvarObras(obras):
-        print(verde('OBRA ATUALIZADA COM SUCESSO!'))
-    else:
-        print(vermelho('NÃO FOI POSSÍVEL EDITAR A OBRA'))
 
 def deletar():
     obras = carregarObras()
@@ -449,6 +602,7 @@ def deletar():
             print(verde("Retornando ao menu..."))
             sleep(1)
             return
+
 def validarObrasImportadas(obras):
     if type(obras) != list:
         return False
@@ -543,6 +697,7 @@ def importarObras():
         else:
             print(vermelho("OCORREU UM ERRO AO VALIDAR AS OBRAS"))
             return False
+
 def exportarObras():
     obras = carregarObras()
     if obras is None:
@@ -559,4 +714,3 @@ def exportarObras():
     else:
         print(verde("OBRAS EXPORTADAS COM SUCESSO"))
         return True
-
