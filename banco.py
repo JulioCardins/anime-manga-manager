@@ -89,3 +89,20 @@ def atualizarObras(id_obra, coluna, novo_valor):
 
     finally:
         conexao.close()
+
+def deletarObras(id_obra):
+    conexao = sqlite3.connect("obras.db")
+    cursor = conexao.cursor()
+
+    try:
+        comando = "DELETE from obras WHERE id = ?"
+        cursor.execute(comando, (id_obra,))
+        conexao.commit()
+    except sqlite3.Error as e:
+        print(f"Erro: {e}")
+        return False
+    else:
+        return True
+    finally:
+        conexao.close()
+

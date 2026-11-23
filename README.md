@@ -22,8 +22,8 @@ O projeto foi criado com o objetivo de praticar conceitos fundamentais de Python
 ## 🛠️ Tecnologias utilizadas
 
 - Python
+- SQLite (`sqlite3`)
 - JSON
-- Manipulação de arquivos TXT
 - Git e GitHub
 
 ## 📂 Estrutura do projeto
@@ -78,11 +78,11 @@ python main.py
 
 ## 💾 Armazenamento dos dados
 
-As obras cadastradas são armazenadas localmente no arquivo `animes.txt`.
+As obras cadastradas são armazenadas localmente em um banco de dados SQLite (obras.db).
 
-Esse arquivo é criado/utilizado pelo programa e não precisa estar presente inicialmente.
+O banco e a tabela são criados automaticamente pelo programa caso ainda não existam.
 
-A exportação dos dados é realizada utilizando o formato JSON.
+A troca de dados em formato JSON também é suportada para exportação e importação.
 
 ## 📥 Importação
 
@@ -100,11 +100,10 @@ Caso uma obra importada possua o mesmo nome e categoria de uma obra existente, o
 Este projeto foi desenvolvido como exercício prático de Python, trabalhando conceitos como:
 
 - funções;
-- listas;
-- dicionários;
+- listas e dicionarios;
 - estruturas condicionais;
 - tratamento de exceções;
-- leitura e escrita de arquivos;
+- banco de dados relacional com SQLite;
 - JSON;
 - validação de dados;
 - modularização;
@@ -112,4 +111,4 @@ Este projeto foi desenvolvido como exercício prático de Python, trabalhando co
 
 ## 📌 Status
 
-Projeto funcional, ainda sujeito a melhorias e novas funcionalidades.
+Em migração de armazenamento para SQLite, com fluxo principal funcional e sujeito a melhorias e novas funcionalidades.

@@ -142,9 +142,6 @@ def cadastrar():
    
     :return:
     """
-    obras = carregarObras()
-    if obras is None:
-        return
     while True:
         nome = validarNome(input(f"{branco("Digite o nome da obra: ")} "))
         print(branco("Qual a categoria da obra? "))
@@ -193,9 +190,7 @@ def cadastrar():
             'interesse': interesse,
             'analise': analise,
         }
-        adicionarObra(apresentacao)
-        obras.append(apresentacao)
-        if salvarObras(obras):
+        if adicionarObra(apresentacao):
             print("UM MOMENTO...")
             sleep(1)
             print(verde("OBRA CADASTRADA COM SUCESSO!"))
@@ -573,7 +568,7 @@ def editar():
             return
 
 def deletar():
-    obras = carregarObras()
+    obras = buscarObras()
     if obras is None:
         return
     if len(obras) == 0:
@@ -581,7 +576,9 @@ def deletar():
         return
     mostrarObrasSelecao(obras)
     escolha = validarEscolha(input("Sua escolha: "), len(obras)) - 1
-    print(f"{branco("Você escolheu excluir o item")} {azul(obras[escolha]['nome'])} | {azul(obras[escolha]['categoria'])}")
+    obra_escolhida = obras[escolha]
+    id_obra = obra_escolhida["id"]
+    print(f"{branco("Você escolheu excluir a obra")} {azul(obras[escolha]['nome'])} | {azul(obras[escolha]['categoria'])}")
     print(f"{branco("TEM CERTEZA QUE DESEJA EXCLUIR? A AÇÃO NÃO PODERÁ SER DESFEITA!!")}")
     print(f"{amarelo("[1]")} - {vermelho("EXCLUIR")}      {amarelo("[2]")} - {verde("VOLTAR")}")
     opcao = validarEscolha(input("Sua opção: "))
@@ -591,8 +588,7 @@ def deletar():
             sleep(1)
             nome_excluido = obras[escolha]['nome']
             categoria_excluido = obras[escolha]['categoria']
-            obras.pop(escolha)
-            if salvarObras(obras):
+            if deletarObras(id_obra):
                 print(verde(f"OBRA {azul(nome_excluido)} | {azul(categoria_excluido)} {verde("DELETADA COM SUCESSO!")}"))
             else:
                 print(vermelho('NÃO FOI POSSIVEL DELETAR A OBRA'))
