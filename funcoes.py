@@ -353,7 +353,7 @@ def editar():
                 input("Digite o nome atualizado: ")
             )
 
-            if atualizarObras(id_obra, "nome", novo_nome):
+            if atualizarObras(id_obra, {"nome": novo_nome}):
                 print(verde("OBRA ATUALIZADA COM SUCESSO!"))
             else:
                 print(vermelho("NÃO FOI POSSÍVEL EDITAR A OBRA"))
@@ -367,7 +367,7 @@ def editar():
                 input("Digite a nota atualizada: ")
             )
 
-            if atualizarObras(id_obra, "nota", nova_nota):
+            if atualizarObras(id_obra, {"nota": nova_nota}):
                 print(verde("OBRA ATUALIZADA COM SUCESSO!"))
             else:
                 print(vermelho("NÃO FOI POSSÍVEL EDITAR A OBRA"))
@@ -385,11 +385,11 @@ def editar():
 
             match novo_status:
                 case 1:
-                    novo_status = True
+                    novo_status = 1
                 case 2:
-                    novo_status = False
+                    novo_status = 0
 
-            if atualizarObras(id_obra, "status", novo_status):
+            if atualizarObras(id_obra, {"status": novo_status}):
                 print(verde("OBRA ATUALIZADA COM SUCESSO!"))
             else:
                 print(vermelho("NÃO FOI POSSÍVEL EDITAR A OBRA"))
@@ -410,8 +410,7 @@ def editar():
 
             if atualizarObras(
                 id_obra,
-                "categoria",
-                nova_categoria
+                    {"categoria": nova_categoria}
             ):
                 print(verde("OBRA ATUALIZADA COM SUCESSO!"))
             else:
@@ -443,31 +442,16 @@ def editar():
                 )
 
                 if opc == 1:
-                    atualizarObras(
-                        id_obra,
-                        "interesse",
-                        True
-                    )
-
-                    atualizarObras(
-                        id_obra,
-                        "status",
-                        False
-                    )
-
-                    atualizarObras(
-                        id_obra,
-                        "nota",
-                        0
-                    )
-
-                    atualizarObras(
-                        id_obra,
-                        "analise",
-                        "<SEM ANALISE>"
-                    )
-
-                    print(verde("OBRA ADICIONADA À LISTA DE INTERESSE!"))
+                    dados_atualizados = {
+                        "interesse": 1,
+                        "status": 0,
+                        "nota": 0,
+                        "analise": "<SEM ANALISE>",
+                    }
+                    if atualizarObras(id_obra, dados_atualizados):
+                        print(verde("OBRA ADICIONADA À LISTA DE INTERESSE!"))
+                    else:
+                        print(vermelho("NÃO FOI POSSÍVEL ATUALIZAR A OBRA"))
 
                 else:
                     return
@@ -475,8 +459,7 @@ def editar():
             else:
                 atualizarObras(
                     id_obra,
-                    "interesse",
-                    False
+                    {"interesse": 0}
                 )
 
                 print(branco("O que achou da obra? "))
@@ -488,8 +471,7 @@ def editar():
 
                 atualizarObras(
                     id_obra,
-                    "nota",
-                    nova_nota
+                    {"nota": nova_nota}
                 )
 
                 concluidoOpcao()
@@ -500,14 +482,13 @@ def editar():
 
                 match novo_status:
                     case 1:
-                        novo_status = True
+                        novo_status = 1
                     case 2:
-                        novo_status = False
+                        novo_status = 0
 
                 atualizarObras(
                     id_obra,
-                    "status",
-                    novo_status
+                    {"status": novo_status}
                 )
 
                 print(
@@ -535,8 +516,7 @@ def editar():
 
                 atualizarObras(
                     id_obra,
-                    "analise",
-                    nova_analise
+                    {"analise": nova_analise}
                 )
 
                 print(verde("OBRA RETIRADA DA LISTA DE INTERESSE!"))
@@ -555,8 +535,7 @@ def editar():
 
             if atualizarObras(
                 id_obra,
-                "analise",
-                nova_analise
+                    {"analise": nova_analise}
             ):
                 print(verde("OBRA ATUALIZADA COM SUCESSO!"))
             else:
@@ -659,7 +638,7 @@ def importarObras():
             if opc == 1:
                 obras_finais = obras_importadas
             else:
-                obras_atuais = carregarObras()
+                obras_atuais = buscarObras()
                 if obras_atuais is None:
                     return False
                 for obra_imp in obras_importadas:
@@ -695,7 +674,7 @@ def importarObras():
             return False
 
 def exportarObras():
-    obras = carregarObras()
+    obras = buscarObras()
     if obras is None:
         return
     try:

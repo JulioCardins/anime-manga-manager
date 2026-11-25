@@ -1,0 +1,83 @@
+[
+    {
+        "id": 1,
+        "nome": "KonoSuba",
+        "nota": 10,
+        "status": 1,
+        "categoria": "Anime",
+        "interesse": 0,
+        "analise": "<SEM ANALISE>"
+    },
+    {
+        "id": 3,
+        "nome": "Berserk",
+        "nota": 8,
+        "status": 0,
+        "categoria": "Manga",
+        "interesse": 0,
+        "analise": "Ótimo, mas o prota sofre demais"
+    },
+    {
+        "id": 4,
+        "nome": "Grand Blue",
+        "nota": 10,
+        "status": 0,
+        "categoria": "Manga",
+        "interesse": 0,
+        "analise": "Obra excelente de comédia, ri horrores kkkkk"
+    },
+    {
+        "id": 5,
+        "nome": "Fullmetal Alchemist",
+        "nota": 10,
+        "status": 1,
+        "categoria": "Anime",
+        "interesse": 0,
+        "analise": "<SEM ANALISE>"
+    },
+    {
+        "id": 6,
+        "nome": "One Piece",
+        "nota": 0,
+        "status": 0,
+        "categoria": "Manga",
+        "interesse": 1,
+        "analise": "<SEM ANALISE>"
+    },
+    {
+        "id": 7,
+        "nome": "Tengen Toppa Gurren Lagann",
+        "nota": 10,
+        "status": 1,
+        "categoria": "Anime",
+        "interesse": 0,
+        "analise": "<SEM ANALISE>"
+    },
+    {
+        "id": 8,
+        "nome": "Killing Bites",
+        "nota": 7,
+        "status": 0,
+        "categoria": "Manga",
+        "interesse": 0,
+        "analise": "<SEM ANALISE>"
+    },
+    {
+        "id": 9,
+        "nome": "Boku no Hero",
+        "nota": 7,
+        "status": 0,
+        "categoria": "Anime",
+        "interesse": 0,
+        "analise": "<SEM ANALISE>"
+    },
+    {
+        "id": 10,
+        "nome": "Attack on Titan",
+        "nota": 10,
+        "status": 1,
+        "categoria": "Anime",
+        "interesse": 0,
+        "analise": "<SEM ANALISE>"
+    }
+]

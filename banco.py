@@ -1,5 +1,5 @@
 import sqlite3
-
+from cores import vermelho
 def criarBanco():
     conexao = sqlite3.connect("obras.db")
     cursor = conexao.cursor()
@@ -58,7 +58,10 @@ def buscarObras():
         obras = []
 
         for obra in obras_banco:
-            obras.append(dict(obra))
+            obra_dict = dict(obra)
+            obra_dict['status'] = bool(obra_dict['status'])
+            obra_dict['interesse'] = bool(obra_dict['interesse'])
+            obras.append(obra_dict)
 
     except sqlite3.Error as e:
         print(f"Erro: {e}")
@@ -71,24 +74,37 @@ def buscarObras():
 
 
 
-def atualizarObras(id_obra, coluna, novo_valor):
-    conexao = sqlite3.connect("obras.db")
-    cursor = conexao.cursor()
+def atualizarObras(id_obra, dados):
+    if not isinstance(dados, dict) or not dados:
+        return False
 
+    colunas_permitidas = {"nome", "nota", "status", "categoria", "interesse", "analise"}
+
+    for coluna in dados:
+        if coluna not in colunas_permitidas:
+            print(vermelho("COLUNA INVALIDA PARA ATUALIZAÇÃO"))
+            return False
+
+    set_clausulas = [f"{coluna} = ?" for coluna in dados]
+    valores = list(dados.values())
+    valores.append(id_obra)
+
+    conexao = None
     try:
-        comando = f"UPDATE obras SET {coluna} = ? WHERE id = ?"
-        cursor.execute(comando, (novo_valor, id_obra))
+        conexao = sqlite3.connect("obras.db")
+        cursor = conexao.cursor()
+        comando = f"UPDATE obras SET {', '.join(set_clausulas)} WHERE id = ?"
+        cursor.execute(comando, valores)
         conexao.commit()
+        return True
 
     except sqlite3.Error as e:
         print(f"Erro: {e}")
         return False
 
-    else:
-        return True
-
     finally:
-        conexao.close()
+        if conexao:
+            conexao.close()
 
 def deletarObras(id_obra):
     conexao = sqlite3.connect("obras.db")
